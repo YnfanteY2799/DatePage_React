@@ -1,3 +1,4 @@
+import 'semantic-ui-css/semantic.min.css';
 import React, { useState } from "react";
 import './css/App.css';
 import { Calendar } from "../source/components/calendar/Calendar";
@@ -51,22 +52,16 @@ const doctorProps = {
 
 }
 
-
-
-
 const App = () => {
   
   let [dateSetter, setDateSetter] = useState("");
-  
-  // console.log(dateSetter)
-  
+    
   return <div className="App">
-        
-    <NavBar/>
-    <main>
-      <Calendar doctorProps={doctorProps}  settingDate={(d) => setDateSetter(d)} />
-    </main>
+          <NavBar/>
           
+          <main>
+            <Calendar doctorProps={doctorProps}  settingDate={(d) => setDateSetter(d)} />
+          </main>
   </div>
 }
 

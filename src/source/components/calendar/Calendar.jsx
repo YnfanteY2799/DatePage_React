@@ -120,7 +120,7 @@ const DeatilsModal = ({ doctorDayProp, isOpen, onClickOut, onChangeInput }) => {
                                     <tr>
                                         <th>Nombre Cliente</th>
                                         <th>Hora</th>
-                                        <th>Confirmacion?</th>
+                                        <th>Confirmacion</th>
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
