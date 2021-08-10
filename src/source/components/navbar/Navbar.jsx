@@ -1,40 +1,34 @@
 import React from 'react';
-import { Menu, Input } from "semantic-ui-react";
+import { Grid, Sidebar as SemanticSide, Menu, Input } from "semantic-ui-react";
 
 
-const NavBar = ({opts}) => {
 
-    let handleItemClick = () => window.alert("AAAA");
+// https://react.semantic-ui.com/modules/accordion/#advanced-form
+// https://react.semantic-ui.com/collections/menu/#types-attached
+// https://react.semantic-ui.com/collections/grid/#responsive-variations-container
+// https://react.semantic-ui.com/modules/sidebar/#examples-multiple
 
+const Navbar = ()=> {
 
-    // https://react.semantic-ui.com/modules/sidebar/#types-sidebar
+  return <> </>
+};
 
-    return <Menu secondary>
-    <Menu.Item name='home' active={"activeItem" === 'home'}/>
-    <Menu.Item
-      name='messages'
-      active={"activeItem" === 'messages'}
-      onClick={handleItemClick}
-    />
-    <Menu.Item
-      name='friends'
-      active={"activeItem" === 'friends'}
-      onClick={handleItemClick}
-    />
-    <Menu.Menu position='right'>
-      <Menu.Item>
-        <Input icon='search' placeholder='Search...' />
-      </Menu.Item>
-      <Menu.Item
-        name='logout'
-        active={"activeItem" === 'logout'}
-        onClick={handleItemClick}
-      />
-    </Menu.Menu>
-  </Menu>;
+const Sidebar = ({opts}) => {
+    return <Grid columns={1}>
+
+      <SemanticSide as={Menu} animation='overlay' vertical
+        icon='labeled' inverted onHide={() => alert(false)}
+        visible={true} width='medium'>
+            <Menu.Item as='a'><Input></Input></Menu.Item>
+            <Menu.Item as='a'>Home</Menu.Item>
+            <Menu.Item as='a'>Games</Menu.Item>
+            <Menu.Item as='a'>Channels</Menu.Item>
+      </SemanticSide>
+
+    </Grid>;
 }
 
 
 
 
-export { NavBar };
+export { Sidebar, Navbar };
