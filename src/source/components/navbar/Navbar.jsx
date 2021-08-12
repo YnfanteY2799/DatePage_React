@@ -1,39 +1,34 @@
-import React from 'react';
-import { Grid, Sidebar as Side, Menu, Dropdown } from "semantic-ui-react";
-
-
-
-// https://react.semantic-ui.com/modules/accordion/#advanced-form
-// https://react.semantic-ui.com/collections/menu/#types-attached
-// https://react.semantic-ui.com/collections/grid/#responsive-variations-container
-// https://react.semantic-ui.com/modules/sidebar/#examples-multiple
-
-const Navbar = ()=> {
-
-  return <> </>
-};
+import React, { useState } from 'react';
 
 const Sidebar = ({menu, cliking}) => {
-  return( 
-    <Grid columns={1}>
-      <Side as={Menu} animation='overlay' vertical
-        icon='labeled' inverted //onHide={() => alert(false)}
-        visible={true} width='medium'>
-          {menu.map(({catName, docNames}) => 
-            <Menu.Item>
-              <Dropdown text={catName} pointing className='link item'>
-                  <Dropdown.Menu>
-                      {docNames.map(({name, id}) => <Dropdown.Item onClick={() => cliking(id)}>{name}</Dropdown.Item>)}
-                  </Dropdown.Menu>
-              </Dropdown>
-            </Menu.Item>
-          )}
-      </Side>
-    </Grid>
+
+  let [selectedDocPerCat, setSelectedDocPerCat] = useState([]);
+  let catMenu = (menu ?? [] ).map( o => o.catName);
+  let setCatts = (value) => setSelectedDocPerCat((menu ?? []).filter(o =>o.catName === value).flatMap(o => o.docNames) );
+   
+  return(
+    <div className="row">
+      
+      <div className="container low-whidt">
+        <select className="form-select" onChange={({target:{value}}) =>{setCatts(value)}}>
+          <option key={menu.length + 1 } value="" >Seleccione una categoria....</option>
+          {catMenu.map((x,i) => <option value={x} key={i}>{x}</option> )}
+        </select>
+      </div>
+  
+      <div className="container low-whidt">
+          <select className="form-select" onChange={({target:{value}}) => cliking(value)}>
+            <option key={menu.length + 1 } value="" >Seleccione un doctor....</option>
+            {selectedDocPerCat.map(({ name , id }, i ) => <option key={i} value={id}>{name}</option>)}
+          </select>
+      </div>
+  </div>
   );
+
 }
 
 
 
 
-export { Sidebar, Navbar };
+
+export { Sidebar };

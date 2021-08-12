@@ -1,37 +1,35 @@
 import React from "react";
-import { Form } from "semantic-ui-react";
 
-const CalendarForm = ({selectedDates}) => {
+const CalendarForm = ( { selectedDates = { dayDates:{ dates:[] } }, deleteReg } ) => {
+    
+    let { dayDates:{dates, month, day, yearDates }, docId } = selectedDates;
 
-    let { dayDates:{dates} } = selectedDates;
     return(
-        <Form>
-            {( dates ?? [] ).map(({clientName, hoursFrom, HoursTo}) => 
-            <Form.Group widths='equal'>
-                <Form.Input
-                    fluid
-                    id='form-subcomponent-shorthand-input-first-name'
-                    label='Name'
-                    placeholder='Name'
-                    value={clientName}
-                />
-                <Form.Input
-                    fluid
-                    id='form-subcomponent-shorthand-input-last-name'
-                    label='Desde'
-                    placeholder='Desde'
-                    value={hoursFrom}
-                />
-                <Form.Input
-                    fluid
-                    id='form-subcomponent-shorthand-input-last-name'
-                    label='Hasta'
-                    placeholder='Hasta'
-                    value={HoursTo}
-                />
-            </Form.Group>
-        )}
-      </Form>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th scope="col">Desde</th>
+                    <th scope="col">Hasta</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Confirmado</th>
+                    <th scope="col">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {( dates ?? [] ).map(({clientName, hoursFrom, HoursTo, confirmed, id },i) => 
+                    <tr key={i}>
+                        <td>{hoursFrom}</td>
+                        <td>{HoursTo}</td>
+                        <td>{clientName}</td>
+                        <td>{confirmed ? "Confirmado!" : "Falta Confirmacion"}</td>
+                        <td> 
+                            <button className="btn outline fas fa-pen-square"/> / 
+                            <button className="btn outline fas fa-minus-square" onClick={() => deleteReg(id, docId, month, day, yearDates) } /> 
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
     );
 }
 

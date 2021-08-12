@@ -11,7 +11,6 @@ import {
     isSameMonth
 } from "date-fns";
 
-
 const Header = ({changeMonth = t => alert(t), actualMonth, actualDate }) => (
     <div className="header row flex-middle">
         {/* Left */}
@@ -43,55 +42,44 @@ const Days = ({ actualMonth }) =>{
             </div>
         );
     }
-    return <div className= "days row">{days}</div>
+    return <div className= "days row">{days}</div>;
 }
 
-const Cells = ({currentMonth, onDateClick = d => alert(d), scheduledDays = {scheduledDay:[]}}) =>{
+const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = {scheduledDay:[]} } ) =>{
 
-
-    let {maxDatesPerDay, yearDates, nonAvailableDays, scheduledDay } = scheduledDays, 
-        currMonthDates = scheduledDay.filter(({month}) => month === currentMonth.getMonth() + 1),
-        monthStart = startOfMonth(currentMonth),
-        monthEnd = endOfMonth( monthStart ),
-        startDate = startOfWeek( startOfMonth(monthStart) ),
-        endDate = endOfWeek(monthEnd),
-        days = [], rows = [], day = startDate,
-        formattedDate = "",
-        exec = ({target:{id}}) => onDateClick( new Date(id) ),
-        filteringFunctions = ({day:d}) => (
-            day.getDate() === d && 
-            day.getFullYear() === yearDates && 
-            isSameMonth(day, monthStart)),
-            nonAvDays = nonAvailableDays.filter(({month}) => month === currentMonth.getMonth() + 1).map(({day})=> day),
-            setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
+    let {maxDatesPerDay, nonAvailableDays, scheduledDay } = scheduledDays;
+    let currMonthDates = scheduledDay.filter(({month}) => month === currentMonth.getMonth() + 1);
+    let monthStart = startOfMonth(currentMonth);
+    let monthEnd = endOfMonth( monthStart );
+    let startDate = startOfWeek( startOfMonth(monthStart) );
+    let endDate = endOfWeek(monthEnd);
+    let days = [], rows = [], day = startDate, formattedDate = "";
+    let exec = ({target:{id}}) => onDateClick( new Date(id) );
+    let filteringFunctions = ({day:d, yearDates:y}) => ( day.getDate() === d && day.getFullYear() === y && isSameMonth(day, monthStart));
+    let nonAvDays = nonAvailableDays.filter(({month, yearDates:y}) => month === currentMonth.getMonth() + 1 && y === day.getFullYear()).map(({day})=> day);
+    let setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
             
-        while(day <= endDate){
-            for(let i = 0; i < 7; i++){
-                formattedDate = format(day, "d");
-                let [ cof ] = currMonthDates.filter( filteringFunctions );
+    while(day <= endDate){
+        for(let i = 0; i < 7; i++){
+            formattedDate = format(day, "d");
+            let [ cof ] = currMonthDates.filter( filteringFunctions );
             
-                days.push(
-                    <div className={`col cell ${ setDisabledDays(day) && "disabled"}`} key={i} onClick={exec} id={day}
-                    style={
-                        (cof !== undefined) ? 
-                        ((cof.dates.length === maxDatesPerDay) ? {backgroundColor:'#A52A2A'} : {}) : 
-                        {}
-                    }>
-                        <span className="number" id={day}>{formattedDate}</span>
-                        <span className="bg" id={day}>{formattedDate}</span>
-                    </div>
-                );
-                day = addDays(day,1);
-            }
-
-            rows.push( <div className="row" key={day}> {days} </div> );
-            days = [];
+            days.push(
+                <div className={`col cell ${ setDisabledDays(day) && "disabled"}`} key={i} onClick={exec} id={day}
+                style={(cof !== undefined) ? 
+                ( (cof.dates.length === maxDatesPerDay) ? {backgroundColor:'#A52A2A'} : {} ) : {} }>
+                    <span className="number" id={day}>{formattedDate}</span>
+                    <span className="bg" id={day}>{formattedDate}</span>
+                </div>
+            );
+            day = addDays(day,1);
         }
+
+        rows.push( <div className="row" key={day}> {days} </div> ); days = [];
+    }
 
     return <div className="body" > {rows} </div>;
 }
-
-
 
 const Calendar = ({ doctorProps, settingDate  }) => {
 
@@ -105,13 +93,15 @@ const Calendar = ({ doctorProps, settingDate  }) => {
 
     // Out-Component Functions
     let onDateClick = arg =>{ 
-        let {name, scheduledDay:sd } = doctorProps;
+        let {name, scheduledDay:sd, doctorId } = doctorProps;
         let date = `${arg.getDate()}/${arg.getMonth() + 1}/${arg.getFullYear()}`;
-        let filteringDate = sd.filter(({month:m, day:d}) => d === arg.getDate() && m === arg.getMonth() + 1 );
+        let filteringDate = sd.filter(({month:m, day:d, yearDates:y}) => d === arg.getDate() && m === arg.getMonth() + 1 && y === arg.getFullYear() );        
+       
         settingDate({
             name:name,
             dayDates: filteringDate.length > 0 ? filteringDate[0] : [],
             crrDate:date,
+            docId:doctorId,
         });
     }
 
@@ -120,11 +110,7 @@ const Calendar = ({ doctorProps, settingDate  }) => {
             <Header changeMonth={changeMonth} actualMonth = {currentMonth} actualDate={setCurrentDate}/> 
             <Days actualMonth={currentMonth} /> 
             <Cells currentMonth={currentMonth} 
-            onDateClick={(e) => onDateClick(e)} scheduledDays = {doctorProps} /> 
-            {/* <DeatilsModal doctorDayProp = {currentDayDoctor} isOpen={openModal} 
-            onClickOut={({target:{id}}) => openCloseModal(id)} 
-            onChangeInput={({target}) => inputEvowel(target)}/> */}
-
+            onDateClick={(e) => onDateClick(e)} scheduledDays = {doctorProps} />
         </div>
     );
 }
