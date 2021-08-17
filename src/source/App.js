@@ -10,10 +10,8 @@ const doctorProps = [
   name:"Yulian Montoya",
   doctorId:"y9896458",
   maxDatesPerDay:7,
-  scheduledDayPerYear:{
-    year:2021,
-    days:[
-    {month: 8, day: 15 , dates:[
+  scheduledDay:[
+    {yearDates:2021, month: 8, day: 15 , dates:[
       { clientName:"Juancito", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321456" ,confirmed:false },
       { clientName:"Juana", hoursFrom:"10:00AM", HoursTo: "11:00AM", id:"458596321459" , confirmed:false },
       { clientName:"Manuel", hoursFrom:"09:00AM", HoursTo: "01:00PM", id:"4585963214510" , confirmed:false },
@@ -22,7 +20,7 @@ const doctorProps = [
       { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321413" , confirmed:false },
       { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321466" , confirmed:false }
     ]},
-    {month: 8, day: 13 , dates:[
+    {yearDates:2021, month: 8, day: 13 , dates:[
       { clientName:"Juancito", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
       { clientName:"Juana", hoursFrom:"10:00AM", HoursTo: "11:00AM", confirmed:false },
       { clientName:"Manuel", hoursFrom:"09:00AM", HoursTo: "01:00PM", confirmed:false },
@@ -31,7 +29,7 @@ const doctorProps = [
       { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
       { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false }
     ]},
-    {month: 8, day: 16 , dates:[
+    {yearDates:2021, month: 8, day: 16 , dates:[
       { clientName:"Juancito", hoursFrom:"500AM", HoursTo: "01:00PM", confirmed:false },
       { clientName:"Juana", hoursFrom:"1000AM", HoursTo: "11:00AM", confirmed:false },
       { clientName:"Manuel", hoursFrom:"900AM", HoursTo: "01:00PM", confirmed:false },
@@ -40,7 +38,7 @@ const doctorProps = [
       { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
       { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false }
     ]},
-  ]},
+  ],
   nonAvailableDays:[
     {yearDates:2021, month:8 , day: 10},
     {yearDates:2021, month:8 , day: 11},
