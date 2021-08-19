@@ -11,6 +11,12 @@ import {
     isSameMonth
 } from "date-fns";
 
+const defaultScheduleDays = {
+    NonAvailableDaysActualYear:[],
+    Dates:[],
+    maxDatesPerDay:100,
+}
+
 const Header = ({changeMonth = t => alert(t), actualMonth, actualDate }) => (
     <div className="header row flex-middle">
         {/* Left */}
@@ -45,29 +51,43 @@ const Days = ({ actualMonth }) =>{
     return <div className= "days row">{days}</div>;
 }
 
-const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = {scheduledDay:[]} } ) =>{
+const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = defaultScheduleDays } ) =>{
 
-    let {maxDatesPerDay, nonAvailableDays, scheduledDay } = scheduledDays;
-    let currMonthDates = scheduledDay.filter(({month}) => month === currentMonth.getMonth() + 1);
+    // console.table("ScheduledDays", scheduledDays);
+
+    let { maxDatesPerDay, NonAvailableDaysActualYear, Dates, yearOfDates } = scheduledDays;
+
+        console.log(NonAvailableDaysActualYear);
+        console.log(maxDatesPerDay);
+        console.log("scheduledDays : ", scheduledDays);
+
+    let currMonthDates = (Dates??[]).filter(({Month}) => Month === currentMonth.getMonth() + 1);
     let monthStart = startOfMonth(currentMonth);
     let monthEnd = endOfMonth( monthStart );
     let startDate = startOfWeek( startOfMonth(monthStart) );
     let endDate = endOfWeek(monthEnd);
     let days = [], rows = [], day = startDate, formattedDate = "";
     let exec = ({target:{id}}) => onDateClick( new Date(id) );
-    let filteringFunctions = ({day:d, yearDates:y}) => ( day.getDate() === d && day.getFullYear() === y && isSameMonth(day, monthStart));
-    let nonAvDays = nonAvailableDays.filter(({month, yearDates:y}) => month === currentMonth.getMonth() + 1 && y === day.getFullYear()).map(({day})=> day);
+    let filteringFunctions = ({Day:d}) => ( day.getDate() === d && day.getFullYear() === yearOfDates && isSameMonth(day, monthStart));
+    let nonAvDays = (NonAvailableDaysActualYear??[]).filter(({Month}) => Month === currentMonth.getMonth() + 1 && yearOfDates === day.getFullYear()).map(({day})=> day);
     let setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
-            
+    let getDays = (cof) => {
+        
+    
+        return (cof.DatesAtDay === maxDatesPerDay) ? {backgroundColor:'#A52A2A'} : {} ;
+    };        
+
+
     while(day <= endDate){
         for(let i = 0; i < 7; i++){
             formattedDate = format(day, "d");
             let [ cof ] = currMonthDates.filter( filteringFunctions );
             
+            console.log("cof", cof)
+
             days.push(
                 <div className={`col cell ${ setDisabledDays(day) && "disabled"}`} key={i} onClick={exec} id={day}
-                style={(cof !== undefined) ? 
-                ( (cof.dates.length === maxDatesPerDay) ? {backgroundColor:'#A52A2A'} : {} ) : {} }>
+                style={(cof !== undefined) ? getDays(cof) : {} }>
                     <span className="number" id={day}>{formattedDate}</span>
                     <span className="bg" id={day}>{formattedDate}</span>
                 </div>
@@ -93,16 +113,19 @@ const Calendar = ({ doctorProps, settingDate  }) => {
 
     // Out-Component Functions
     let onDateClick = arg =>{ 
-        let {name, scheduledDay:sd, doctorId } = doctorProps;
-        let date = `${arg.getDate()}/${arg.getMonth() + 1}/${arg.getFullYear()}`;
-        let filteringDate = sd.filter(({month:m, day:d, yearDates:y}) => d === arg.getDate() && m === arg.getMonth() + 1 && y === arg.getFullYear() );        
+
+        console.log(arg)
+
+        // let {name, scheduledDay:sd, doctorId } = doctorProps;
+        // let date = `${arg.getDate()}/${arg.getMonth() + 1}/${arg.getFullYear()}`;
+        // let filteringDate = sd.filter(({month:m, day:d, yearDates:y}) => d === arg.getDate() && m === arg.getMonth() + 1 && y === arg.getFullYear() );        
        
-        settingDate({
-            name:name,
-            dayDates: filteringDate.length > 0 ? filteringDate[0] : [],
-            crrDate:date,
-            docId:doctorId,
-        });
+        // settingDate({
+        //     name:name,
+        //     dayDates: filteringDate.length > 0 ? filteringDate[0] : [],
+        //     crrDate:date,
+        //     docId:doctorId,
+        // });
     }
 
     return(

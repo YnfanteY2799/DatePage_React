@@ -1,5 +1,4 @@
-import 'semantic-ui-css/semantic.min.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './css/App.css';
 import { Calendar } from "../source/components/calendar/Calendar";
 import { CalendarForm } from "../source/components/calendar/CalendarForm";
@@ -53,31 +52,14 @@ const doctorProps = [
 }
 ]
 
-const menuOptsLider = [
-  {catName: "Oncologia", docNames:[
-    {name:"Yulian Montoya",id:"y9896458"},
-    {name:"Juanita Montoya",id:"y98964ccccc58"},
-    {name:"Yulian Montoya",id:"u6735674"}
-  ]},
-  {catName: "Dermatologia", docNames:[
-    {name:"Yulian Montoya",id:"aaaaaaaa"},
-    {name:"Juanita Montoya",id:"y9896457"},
-    {name:"Yulian Montoya",id:"u6735674"}
-  ]},
-  {catName: "Odontologia", docNames:[
-    {name:"Yulian Montoya",id:"aaaaaaa"},
-    {name:"Juanita Montoya",id:"y98sss96458"},
-    {name:"Yulian Montoya",id:"u6735674"}
-  ]},
-];
-
 const dfp = {scheduledDay:[], nonAvailableDays:[]};
 
 const App = () => {
   
   let [selectedDate, setSelectedDate] = useState({dayDates:[]});
+  let [professions, setProfessions] = useState([]);
+  let [doctors, setDoctors] = useState([]);
   let [selectedDoctor, setSelectedDoctor] = useState(dfp);
-  let getClicking = (id) => setSelectedDoctor( doctorProps.filter(({doctorId}) => doctorId === id)[0] ?? dfp);
   let gettinRegsToForm = (args) => setSelectedDate(args); 
   let deleteRegFromArr = (id, dcId, month, day, year) => {
 
@@ -86,22 +68,38 @@ const App = () => {
     let [{dates}] = scheduledDay.filter(({day:d, yearDates:yd, month:m}) => d === day && yd === year && m === month );
     // console.log(dates.filter());
       doctorProps[0].scheduledDay.dates = dates.filter(({id:dd}) => dd !== id)
-    console.log(resArr.scheduledDay.dates)
-    console.log(dates)
-    console.log(doctorProps)
-
-    console.log(id)
-    console.log(dcId)
-    console.log(month)
-    console.log(day)
-    console.log(year)
   }  
+  let getMedicPerId = (any) => {
 
+    let formerData = new FormData();
+    formerData.append("DocId", any);
+    fetch("api/usefulComponents/GetDoctorFromId", {method: 'POST',body: formerData} )
+    .then(x => x.json())
+    .then(x => setDoctors(x))
+  }
+
+  let setForm = () => {
+    fetch("api/usefulComponents/GetHello")
+    .then(x => x.json())
+    .then(x => setProfessions(x));
+  }
+
+  let getDocSchedule = (docId) => {
+    let formerData = new FormData();
+    formerData.append("DocId", docId);
+    fetch("api/usefulComponents/GetDoctorSchedule", {method: 'POST',body: formerData} )
+    .then(x => x.json()).then(x => setSelectedDoctor(x))
+  }
+
+  console.log((selectedDoctor.NonAvailableDaysActualYear??[]));
+
+  useEffect(() => setForm(),[]);
 
   return( 
     <div className="card">
       
-      <Sidebar menu={menuOptsLider} cliking={(e) => getClicking(e)}/>
+      <Sidebar professions={professions} doctors={doctors} 
+      cliking={(e) => getMedicPerId(e)} setSelected={(e) => getDocSchedule(e)}/>
       
       <div className="row">
       
@@ -113,6 +111,12 @@ const App = () => {
           <CalendarForm selectedDates={selectedDate} deleteReg={(e,d, m, dd,y) => deleteRegFromArr(e,d, m, dd, y)} />      
         </div>
       
+      
+
+
+
+
+
       </div>
     
     </div>
