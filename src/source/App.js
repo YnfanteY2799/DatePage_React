@@ -63,46 +63,33 @@ const App = () => {
   let gettinRegsToForm = (args) => setSelectedDate(args); 
   let deleteRegFromArr = (id, dcId, month, day, year) => {
 
-    let [resArr] = doctorProps.filter(( {doctorId:dd } ) => dd === dcId );
-    let { scheduledDay } = resArr;
-    let [{dates}] = scheduledDay.filter(({day:d, yearDates:yd, month:m}) => d === day && yd === year && m === month );
-    // console.log(dates.filter());
-      doctorProps[0].scheduledDay.dates = dates.filter(({id:dd}) => dd !== id)
   }  
-  let getMedicPerId = (any) => {
 
+  let getMedicPerId = (any) => {
     let formerData = new FormData();
     formerData.append("DocId", any);
     fetch("api/usefulComponents/GetDoctorFromId", {method: 'POST',body: formerData} )
-    .then(x => x.json())
-    .then(x => setDoctors(x))
+    .then(x => x.json()).then(x => setDoctors(x));
   }
 
-  let setForm = () => {
-    fetch("api/usefulComponents/GetHello")
-    .then(x => x.json())
-    .then(x => setProfessions(x));
-  }
+  let setForm = () => fetch("api/usefulComponents/GetHello").then(x => x.json()).then(x => setProfessions(x));
 
   let getDocSchedule = (docId) => {
     let formerData = new FormData();
     formerData.append("DocId", docId);
     fetch("api/usefulComponents/GetDoctorSchedule", {method: 'POST',body: formerData} )
-    .then(x => x.json()).then(x => setSelectedDoctor(x))
+    .then(x => x.json()).then(x => setSelectedDoctor(x));
   }
-
-  console.log((selectedDoctor.NonAvailableDaysActualYear??[]));
 
   useEffect(() => setForm(),[]);
 
-  return( 
+  return(
     <div className="card">
       
       <Sidebar professions={professions} doctors={doctors} 
       cliking={(e) => getMedicPerId(e)} setSelected={(e) => getDocSchedule(e)}/>
       
       <div className="row">
-      
         <div className="container low-whidt">
           <Calendar doctorProps={selectedDoctor}  settingDate={(d) => gettinRegsToForm(d)} />
         </div>
@@ -110,13 +97,6 @@ const App = () => {
         <div className="container low-whidt">
           <CalendarForm selectedDates={selectedDate} deleteReg={(e,d, m, dd,y) => deleteRegFromArr(e,d, m, dd, y)} />      
         </div>
-      
-      
-
-
-
-
-
       </div>
     
     </div>

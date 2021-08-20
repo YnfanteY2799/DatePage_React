@@ -73,8 +73,10 @@ const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = def
     let setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
     let getDays = (cof) => {
         
+        console.log( cof )
+
     
-        return (cof.DatesAtDay === maxDatesPerDay) ? {backgroundColor:'#A52A2A'} : {} ;
+        return (cof.DatesAtDay === maxDatesPerDay) ? { backgroundColor:'#A52A2A' } : {};
     };        
 
 
@@ -83,8 +85,6 @@ const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = def
             formattedDate = format(day, "d");
             let [ cof ] = currMonthDates.filter( filteringFunctions );
             
-            console.log("cof", cof)
-
             days.push(
                 <div className={`col cell ${ setDisabledDays(day) && "disabled"}`} key={i} onClick={exec} id={day}
                 style={(cof !== undefined) ? getDays(cof) : {} }>
