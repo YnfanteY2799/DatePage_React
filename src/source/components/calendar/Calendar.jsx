@@ -72,11 +72,9 @@ const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = def
     let nonAvDays = (NonAvailableDaysActualYear??[]).filter(({Month}) => Month === currentMonth.getMonth() + 1 && yearOfDates === day.getFullYear()).map(({day})=> day);
     let setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
     let getDays = (cof) => {
-        
-        console.log( cof )
-
-    
-        return (cof.DatesAtDay === maxDatesPerDay) ? { backgroundColor:'#A52A2A' } : {};
+        if(cof.DatesAtDay === maxDatesPerDay) return { backgroundColor:'#A52A2A' }; // Red <> Full Day
+        else if(cof.DatesAtDay > 0 ) return { backgroundColor:'#62A0D7' }; // Blur <> Not Full Day
+        else return {}; // Nothing <> Clear Day
     };        
 
 
@@ -114,6 +112,7 @@ const Calendar = ({ doctorProps, settingDate  }) => {
     // Out-Component Functions
     let onDateClick = arg =>{ 
 
+        console.log("Date click ma dude")
         console.log(arg)
 
         // let {name, scheduledDay:sd, doctorId } = doctorProps;
