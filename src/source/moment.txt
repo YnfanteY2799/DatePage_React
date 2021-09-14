@@ -1,0 +1,61 @@
+      <Sidebar professions={professions} doctors={doctors} 
+      cliking={(e) => getMedicPerId(e)} setSelected={(e) => getDocSchedule(e)}/>
+      
+      <div className="row">
+        
+        <div className="container low-whidt">
+        
+          <Calendar doctorProps={selectedDoctor} settingDate={(d) => setSelectedDate(d)} />
+        
+        </div>
+
+        <div className="container low-whidt">
+          
+          <CalendarForm selectedDates={selectedDate} 
+          deleteReg={(e,d, m, dd,y) => deleteRegFromArr(e,d, m, dd, y)} 
+          />      
+        
+        </div>
+      </div>
+
+
+
+        // STATEFULL VARIABLES
+  let [selectedDate, setSelectedDate] = useState({dayDates:[]});
+  let [professions, setProfessions] = useState([]);
+  let [doctors, setDoctors] = useState([]);
+  let [selectedDoctor, setSelectedDoctor] = useState(dfp);
+ 
+  
+  let deleteRegFromArr = (id, dcId, month, day, year) => {
+
+  }  
+
+  let getMedicPerId = (any) => {
+    let formerData = new FormData();
+    formerData.append("DocId", any);
+    fetch("api/usefulComponents/GetDoctorFromId", {method: 'POST',body: formerData} )
+    .then(x => x.json()).then(x => setDoctors(x));
+  }
+
+
+  let getDocSchedule = (docId) => {
+    let formerData = new FormData();
+    formerData.append("DocId", docId);
+    fetch("api/usefulComponents/GetDoctorSchedule", {method: 'POST',body: formerData} )
+    .then(x => x.json()).then(x => setSelectedDoctor(x));
+  }
+
+  useEffect(() => {
+    fetch("api/usefulComponents/GetHello")
+    .then(x => x.json()).then(x => setProfessions(x));
+
+  },[]);
+
+
+
+import { Calendar } from "../source/components/calendar/Calendar";
+import { CalendarForm } from "../source/components/calendar/CalendarForm";
+import { Sidebar } from "../source/components/navbar/Navbar";
+
+const dfp = {scheduledDay:[], nonAvailableDays:[]};

@@ -62,15 +62,25 @@ const Cells = ( { currentMonth, onDateClick = d => alert(d), scheduledDays = def
         console.log("scheduledDays : ", scheduledDays);
 
     let currMonthDates = (Dates??[]).filter(({Month}) => Month === currentMonth.getMonth() + 1);
+    
     let monthStart = startOfMonth(currentMonth);
+    
     let monthEnd = endOfMonth( monthStart );
+    
     let startDate = startOfWeek( startOfMonth(monthStart) );
+    
     let endDate = endOfWeek(monthEnd);
+    
     let days = [], rows = [], day = startDate, formattedDate = "";
+    
     let exec = ({target:{id}}) => onDateClick( new Date(id) );
+    
     let filteringFunctions = ({Day:d}) => ( day.getDate() === d && day.getFullYear() === yearOfDates && isSameMonth(day, monthStart));
+    
     let nonAvDays = (NonAvailableDaysActualYear??[]).filter(({Month}) => Month === currentMonth.getMonth() + 1 && yearOfDates === day.getFullYear()).map(({day})=> day);
+    
     let setDisabledDays = (d) => !isSameMonth(d, monthStart) || nonAvDays.includes(d.getDate());
+    
     let getDays = (cof) => {
         if(cof.DatesAtDay === maxDatesPerDay) return { backgroundColor:'#A52A2A' }; // Red <> Full Day
         else if(cof.DatesAtDay > 0 ) return { backgroundColor:'#62A0D7' }; // Blur <> Not Full Day

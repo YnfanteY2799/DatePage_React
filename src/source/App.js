@@ -1,107 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import './css/App.css';
-import { Calendar } from "../source/components/calendar/Calendar";
-import { CalendarForm } from "../source/components/calendar/CalendarForm";
-import { Sidebar } from "../source/components/navbar/Navbar";
+import { HashRouter } from "react-router-dom";
+import { Navbar } from "./components/navbar/Navbar";
+// import { Sidebar } from "./components/navbar/Sidebar";
+import { obj } from "./fakedata-db/Menus";
 
-const doctorProps = [
-{
-  name:"Yulian Montoya",
-  doctorId:"y9896458",
-  maxDatesPerDay:7,
-  scheduledDay:[
-    {yearDates:2021, month: 8, day: 15 , dates:[
-      { clientName:"Juancito", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321456" ,confirmed:false },
-      { clientName:"Juana", hoursFrom:"10:00AM", HoursTo: "11:00AM", id:"458596321459" , confirmed:false },
-      { clientName:"Manuel", hoursFrom:"09:00AM", HoursTo: "01:00PM", id:"4585963214510" , confirmed:false },
-      { clientName:"Jhon", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"4585963214511" , confirmed:false },
-      { clientName:"Peter", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321412" , confirmed:false },
-      { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321413" , confirmed:false },
-      { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", id:"458596321466" , confirmed:false }
-    ]},
-    {yearDates:2021, month: 8, day: 13 , dates:[
-      { clientName:"Juancito", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Juana", hoursFrom:"10:00AM", HoursTo: "11:00AM", confirmed:false },
-      { clientName:"Manuel", hoursFrom:"09:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Jhon", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Peter", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false }
-    ]},
-    {yearDates:2021, month: 8, day: 16 , dates:[
-      { clientName:"Juancito", hoursFrom:"500AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Juana", hoursFrom:"1000AM", HoursTo: "11:00AM", confirmed:false },
-      { clientName:"Manuel", hoursFrom:"900AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Jhon", hoursFrom:"1200AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Peter", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Pedro", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false },
-      { clientName:"Michael", hoursFrom:"11:00AM", HoursTo: "01:00PM", confirmed:false }
-    ]},
-  ],
-  nonAvailableDays:[
-    {yearDates:2021, month:8 , day: 10},
-    {yearDates:2021, month:8 , day: 11},
-    {yearDates:2021, month:8 , day: 12},
-    {yearDates:2021, month:8 , day: 13},
-    {yearDates:2021, month:6 , day: 10},
-    {yearDates:2021, month:7 , day: 10},
-    {yearDates:2021, month:8 , day: 17},
-    {yearDates:2021, month:9 , day: 10},
-    {yearDates:2021, month:10 , day: 10}
-  ],
-}
-]
 
-const dfp = {scheduledDay:[], nonAvailableDays:[]};
+console.log(obj)
 
-const App = () => {
-  
-  let [selectedDate, setSelectedDate] = useState({dayDates:[]});
-  let [professions, setProfessions] = useState([]);
-  let [doctors, setDoctors] = useState([]);
-  let [selectedDoctor, setSelectedDoctor] = useState(dfp);
-  let gettinRegsToForm = (args) => setSelectedDate(args); 
-  let deleteRegFromArr = (id, dcId, month, day, year) => {
-
-  }  
-
-  let getMedicPerId = (any) => {
-    let formerData = new FormData();
-    formerData.append("DocId", any);
-    fetch("api/usefulComponents/GetDoctorFromId", {method: 'POST',body: formerData} )
-    .then(x => x.json()).then(x => setDoctors(x));
-  }
-
-  let setForm = () => fetch("api/usefulComponents/GetHello").then(x => x.json()).then(x => setProfessions(x));
-
-  let getDocSchedule = (docId) => {
-    let formerData = new FormData();
-    formerData.append("DocId", docId);
-    fetch("api/usefulComponents/GetDoctorSchedule", {method: 'POST',body: formerData} )
-    .then(x => x.json()).then(x => setSelectedDoctor(x));
-  }
-
-  useEffect(() => setForm(),[]);
-
-  return(
-    <div className="card">
+const App = () => 
+<div>
+  <HashRouter>  
+    <Navbar title={"CApp"} EndingOptions={obj} InitialOptions={obj}/>   
+    <div className="container-fluid">
+      .row
       
-      <Sidebar professions={professions} doctors={doctors} 
-      cliking={(e) => getMedicPerId(e)} setSelected={(e) => getDocSchedule(e)}/>
-      
-      <div className="row">
-        <div className="container low-whidt">
-          <Calendar doctorProps={selectedDoctor}  settingDate={(d) => gettinRegsToForm(d)} />
-        </div>
-
-        <div className="container low-whidt">
-          <CalendarForm selectedDates={selectedDate} deleteReg={(e,d, m, dd,y) => deleteRegFromArr(e,d, m, dd, y)} />      
-        </div>
-      </div>
-    
     </div>
-  );
-}
+  </HashRouter>
+</div>
+;
+
 
 
 export default App;

@@ -1,33 +1,18 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
-const Sidebar = ({doctors, cliking, professions, setSelected}) => {
+let Navbar = ({title = "", InitialOptions = [], EndingOptions = []}) =>
+<nav className="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+    <Link className="navbar-brand" to="/" style={{marginLeft:"1rem"}}>{title}</Link>
+    <div className="navbar-nav-scroll">
+        <ul className="navbar-nav bd-navbar-nav flex-row">
+            {InitialOptions.map(({name, to}, index) => 
+                <li key={index} className="nav-item nav-link" >
+                    <Link to={to} className="nav-item nav-link">{name}</Link>
+                </li>
+            )}
+        </ul>
+    </div>
+</nav>;
 
-  let setCatts = (value) => {cliking(value); console.log(value)}
-  let catMenu = (professions ?? []); 
-
-  return(
-    <div className="row">
-      
-      <div className="container low-whidt">
-        <select className="form-select" onChange={({target:{value}}) =>{setCatts(value)}}>
-          <option key={catMenu.length + 1 } value="" >Seleccione una categoria....</option>
-          {catMenu.map( ({name,id},i) => <option value={id} key={i}>{name}</option> )}
-        </select>
-      </div>
-  
-      <div className="container low-whidt">
-          <select className="form-select" onChange={({target:{value}}) => setSelected(value)}>
-            <option key={doctors.length + 1 } value="" >Seleccione un doctor....</option>
-            {doctors.map(({ Name , Id }, i ) => <option key={i} value={Id}>{Name}</option>)}
-          </select>
-      </div>
-  </div>
-  );
-
-}
-
-
-
-
-
-export { Sidebar };
+export { Navbar };
