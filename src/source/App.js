@@ -11,10 +11,23 @@ console.log(obj)
 const App = () => 
 <div>
   <HashRouter>  
-    <Navbar title={"CApp"} EndingOptions={obj} InitialOptions={obj}/>   
+    <Navbar 
+    title="CApp" 
+    InitialOptions={obj}
+    EndingOptions={obj} 
+    />   
     <div className="container-fluid">
-      .row
-      
+      <div className="row">
+        <div className="col-sm d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+          1
+        </div>
+        <main className="col-sm">
+          2
+        </main>
+        <div className="col-sm">
+          3
+        </div>
+      </div>
     </div>
   </HashRouter>
 </div>
