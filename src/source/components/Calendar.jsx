@@ -5,7 +5,7 @@ import {
     subMonths, 
     startOfWeek, 
     addDays, 
-    startOfMonth, 
+    startOfMonth,
     endOfMonth,
     endOfWeek,
     isSameMonth

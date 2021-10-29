@@ -2,31 +2,29 @@ import React from "react";
 import './css/App.css';
 import { HashRouter } from "react-router-dom";
 import { Navbar } from "./components/navbar/Navbar";
-// import { Sidebar } from "./components/navbar/Sidebar";
+import { SidebarTest } from "./components/navbar/SidebarTest";
 import { obj } from "./fakedata-db/Menus";
-
-
-console.log(obj)
+import {Calendar} from "./components/Calendar";
 
 const App = () => 
 <div>
   <HashRouter>  
-    <Navbar 
-    title="CApp" 
+    <Navbar title="CApp" 
     InitialOptions={obj}
     EndingOptions={obj} 
     />   
     <div className="container-fluid">
       <div className="row">
-        <div className="col-sm d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-          1
-        </div>
         <main className="col-sm">
-          2
+          
+          <div className="container low-whidt">
+          
+            <Calendar doctorProps={[]} settingDate={(d) => console.log(d)} />
+            
+          </div>
+
+          
         </main>
-        <div className="col-sm">
-          3
-        </div>
       </div>
     </div>
   </HashRouter>
